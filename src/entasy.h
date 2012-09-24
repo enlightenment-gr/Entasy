@@ -1,8 +1,14 @@
 #ifndef _ENTASY_H_
 #define _ENTASY_H_
+#include <Elementary.h>
+#ifdef HAVE_CONFIG_H
+//#ifndef ELM_LIB_QUICKLAUNCH
+#include "elementay_config.h"
+#else
+#define __UNUSED__
+#endif
 
 #include <Emotion.h>
-#include <Elementary.h>
 #include <Ecore_Con.h>
 #include <math.h>
 
@@ -23,6 +29,5 @@ typedef struct _Ent_Song{
 // Global variables
 
 Evas_Object *ent_player;
-Elm_List_Item *curSong;
-
+Elm_Object_Item *curSong;
 #endif
