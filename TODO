@@ -1,0 +1,16 @@
+* Fill needed project files ( INSTALL , CONTRIBUTING )
+* Fill/Tidy Makefile with some more & "proper" rules
+* Add any required info and the depedency listing to README.md ( has markdown syntax )
+* Add Configuration file support 
+* Add support for music discovery from the XDG_MUSIC_DIR ( usually $USER/Music )
+* Fix any magic failures (magic check, magic error, magic wrong etc)
+* Implement Time/Song Seek slidebar
+* make song cover / lyrics frame bidirectional (only flips to lyrics, cant flip back)
+* properly implement the above ^
+* implement song info fetching ( artist, title, album, cover, lyrics, etc... )
+* Alt widget for music listing ( current one does not support folders )
+* Fix control buttons
+* Systray support ?
+* Desktop gadget for ENTASY control ( useful when iconified )
+* Replace text with appropriate icons for the buttons ?
+* Create an Icon for ENTASY
