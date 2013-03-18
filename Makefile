@@ -1,5 +1,5 @@
 CC=gcc
-LINK=-Wall `pkg-config --cflags --libs emotion elementary gstreamer-0.10`
+LINK=-Wall `pkg-config --cflags --libs emotion elementary`
 OUT= -o ./bin/entasy
 
 all:
