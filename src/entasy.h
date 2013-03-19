@@ -1,19 +1,12 @@
 #ifndef _ENTASY_H_
 #define _ENTASY_H_
-#include <Elementary.h>
-#ifdef HAVE_CONFIG_H
-//#ifndef ELM_LIB_QUICKLAUNCH
-#include "elementay_config.h"
-#else
-#define __UNUSED__
-#endif
 
+#include <Elementary.h>
 #include <Emotion.h>
 #include <Ecore_Con.h>
 #include <math.h>
 
-// Structs
-
+// Music Library Structs
 typedef struct _Ent_Config{
 	const char* directory;
 	const char* song_db_file;
@@ -26,8 +19,25 @@ typedef struct _Ent_Song{
 	const char* artist;
 } Song;
 
-// Global variables
+// GUI Structs
+typedef struct _Ent_EntasyUI{
+        Evas_Object *window;
+        Evas_Object *emotion;
+        Evas_Object *background;        
+        Evas_Object *box;
+        Evas_Object *controls;
+        
+        Evas_Object *tracklist;
+        Evas_Object *flipper;
+        Evas_Object *controlButtons;
+        Evas_Object *timeText;
+        Evas_Object *timeSlider;
+        Evas_Object *volumeSlider; 
+                 
+} EntasyUI;
 
-Evas_Object *ent_player;
+// GLOBALUS MAXIMUS
+EntasyUI entUI;
 Elm_Object_Item *curSong;
+
 #endif
