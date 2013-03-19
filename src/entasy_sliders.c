@@ -3,7 +3,7 @@
 
 void
 ent_create_sliders() {
-	// Creating time text/label
+   // Creating time text/label
    entUI.timeText = elm_label_add(entUI.window);
    elm_object_text_set(entUI.timeText, "0:00");
    //elm_label_text_align_set(lb_time,"right");

@@ -16,7 +16,7 @@ elm_main(int argc, char **argv)
     // Setting up emotion
     entUI.emotion = emotion_object_add( evas_object_evas_get(entUI.window) );
     if( emotion_object_init(entUI.emotion,"gstreamer") == EINA_FALSE)
-    	printf("Emotion not properly initialized!");
+      printf("Emotion not properly initialized!");
 
    // Setting up background
    entUI.background = elm_bg_add(entUI.window);
