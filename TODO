@@ -1,6 +1,5 @@
 
 ## Low Priority ##
-* Fill needed project files ( INSTALL , CONTRIBUTING )
 * Fill/Tidy Makefile with some more & "proper" rules
 * Add any required info and the depedency listing to README.md ( has markdown syntax )
 * Create application icon.
