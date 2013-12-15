@@ -43,6 +43,9 @@ PKG_CHECK_MODULES([Entasy], [${requirements}])
 
 AC_CONFIG_FILES([
 Makefile
+src/Makefile
+data/Makefile
+man/Makefile
 ])
 
 AC_OUTPUT
