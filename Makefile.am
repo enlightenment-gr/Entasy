@@ -1,5 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = src data man
+
 MAINTAINERCLEANFILES = \
 Makefile.in \
 ${PACKAGE_TARNAME}-${PACKAGE_VERSION}.tar.gz \
@@ -23,5 +24,6 @@ m4/lt~obsolete.m4 \
 m4/ltoptions.m4 \
 m4/ltsugar.m4 \
 m4/ltversion.m4
+
 EXTRA_DIST = README.md AUTHORS LICENSE autogen.sh
 
