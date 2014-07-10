@@ -39,8 +39,8 @@ elm_main(int argc, char **argv)
    evas_object_size_hint_align_set(entUI.controls, EVAS_HINT_FILL, EVAS_HINT_FILL);
    evas_object_show(entUI.controls);
 
-   //Create parent folder input
-   entUI.folder = ent_create_folder();
+   //Create parent directory input
+   entUI.directory = ent_create_directory();
 
    // Creating tracklist
    entUI.tracklist = ent_create_tracklist();
@@ -56,7 +56,7 @@ elm_main(int argc, char **argv)
 
    // Window callbacks
    evas_object_smart_callback_add(entUI.window, "delete,request", ent_quit, NULL);
-   evas_object_smart_callback_add(entUI.folder, "changed", ent_directory_changed, NULL);
+   evas_object_smart_callback_add(entUI.directory, "changed", ent_directory_changed, NULL);
 
    // Show the window and RUN!
    evas_object_show(entUI.window);
