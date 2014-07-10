@@ -8,6 +8,9 @@
 EAPI_MAIN int
 elm_main(int argc, char **argv)
 {
+    Evas_Object *o;
+    config.directory = "/home/YourUsername/Music";
+
     // Setting up the window
     entUI.window = elm_win_add(NULL, "entasy", ELM_WIN_BASIC);
     elm_win_title_set(entUI.window, "Entasy");
@@ -36,6 +39,9 @@ elm_main(int argc, char **argv)
    evas_object_size_hint_align_set(entUI.controls, EVAS_HINT_FILL, EVAS_HINT_FILL);
    evas_object_show(entUI.controls);
 
+   //Create parent folder input
+   entUI.folder = ent_create_folder();
+
    // Creating tracklist
    entUI.tracklist = ent_create_tracklist();
 
@@ -49,8 +55,8 @@ elm_main(int argc, char **argv)
    ent_create_sliders();
 
    // Window callbacks
-
    evas_object_smart_callback_add(entUI.window, "delete,request", ent_quit, NULL);
+   evas_object_smart_callback_add(entUI.folder, "changed", ent_directory_changed, NULL);
 
    // Show the window and RUN!
    evas_object_show(entUI.window);

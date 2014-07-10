@@ -5,6 +5,8 @@
 
 // Basic application callbacks
 
+void ent_directory_changed(void* data, Evas_Object *obj, void *event_info);
+
 void ent_quit(void* data, Evas_Object *obj, void *event_info);
 
 void ent_play(void* data, Evas_Object *obj, void *event_info);

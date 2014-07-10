@@ -3,6 +3,7 @@
 
 #include "entasy.h"
 
+Evas_Object* ent_create_folder();
 Evas_Object* ent_create_tracklist();
 
 #endif

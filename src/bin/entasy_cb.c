@@ -1,6 +1,24 @@
 #include "entasy_cb.h"
+#include "entasy.h"
 
 // Entasy Callbacks
+
+// Folder change callback
+void
+ent_directory_changed(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
+{
+   char *txt;
+
+   txt = elm_entry_markup_to_utf8(elm_object_text_get(obj));
+   if (txt)
+     {
+        config.directory = malloc(strlen(txt) * sizeof(txt));
+        sprintf(config.directory, "%s", txt);
+        free(txt);
+        printf("The new config is: %s\n", config.directory);
+     }
+   ent_load_file_list(entUI.tracklist, NULL, NULL);
+}
 
 // Window Quit Callback
 void
@@ -35,8 +53,9 @@ ent_list_item_play(void *data, Evas_Object *obj, void *event_info) {
  
  		elm_list_clear (li);
  		Eina_List *files = NULL;	
- 
- 		sprintf(file,"/home/ragecryx/Music/%s",(char*)data);
+
+                sprintf(file,"%s/%s", config.directory, (char*)data);
+                printf("Playing file: %s\n", file);
  
  		emotion_object_file_set(entUI.emotion, file);
  		emotion_object_play_set(entUI.emotion, EINA_TRUE);
@@ -118,8 +137,10 @@ ent_load_file_list(void *data, Evas_Object *obj, void *event_info) {
  		Evas_Object *plist = data;
  		Eina_List *list, *l;
  		char *zdata;
- 
- 		list = ecore_file_ls("/home/ragecryx/Music");
+
+                list = ecore_file_ls(config.directory);
+                if (list)
+                   elm_list_clear(plist);
  		EINA_LIST_FOREACH(list, l, zdata)
  		{
 	 		elm_list_item_append(plist,zdata,NULL,NULL,ent_list_item_play,zdata);

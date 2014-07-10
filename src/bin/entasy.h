@@ -33,11 +33,13 @@ typedef struct _Ent_EntasyUI{
         Evas_Object *timeText;
         Evas_Object *timeSlider;
         Evas_Object *volumeSlider;
+        Evas_Object *folder;
 
 } EntasyUI;
 
 // GLOBALUS MAXIMUS
 EntasyUI entUI;
+Config config;
 Elm_Object_Item *curSong;
 
 #endif
