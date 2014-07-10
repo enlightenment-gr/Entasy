@@ -33,7 +33,7 @@ typedef struct _Ent_EntasyUI{
         Evas_Object *timeText;
         Evas_Object *timeSlider;
         Evas_Object *volumeSlider;
-        Evas_Object *folder;
+        Evas_Object *directory;
 
 } EntasyUI;
 
