@@ -1,7 +1,7 @@
 #include "entasy_tracklist.h"
 
 Evas_Object *
-ent_create_folder(){
+ent_create_directory(){
       Evas_Object *o, *folder;
 
       o = elm_label_add(entUI.window);
