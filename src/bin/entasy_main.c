@@ -57,6 +57,7 @@ elm_main(int argc, char **argv)
    evas_object_smart_callback_add(entUI.directory, "changed", ent_directory_changed, NULL);
    evas_object_smart_callback_add(entUI.volumeSlider, "changed", ent_change_volume, NULL);
    evas_object_smart_callback_add(entUI.timeSlider, "changed", ent_change_time, NULL);
+   //evas_object_smart_callback_add(entUI.flipper, "clicked", ent_flip_panel, entUI.flipper);
    evas_object_smart_callback_add(entUI.emotion, "position_update", ent_update_time, entUI.timeSlider);
 
 
