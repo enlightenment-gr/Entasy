@@ -29,39 +29,58 @@ ent_quit(void *data, Evas_Object *obj, void *event_info) {
 // Play button callback
 void
 ent_play(void *data, Evas_Object *obj, void *event_info) {
-		emotion_object_play_set(entUI.emotion, EINA_TRUE);
+                Elm_Object_Item *song = NULL;
+                if (curSong)
+                  {
+                     emotion_object_play_set(entUI.emotion, EINA_TRUE);
+                  }
+                else
+                  {
+                     song = elm_list_selected_item_get(entUI.tracklist);
+                     if (song)
+                       {
+                          emotion_object_play_set(entUI.emotion, EINA_TRUE);
+                          curSong = song;
+                       }
+                  }
 }
 
 // Pause button callback
 void
 ent_pause(void *data, Evas_Object *obj, void *event_info) {
 		emotion_object_play_set(entUI.emotion, EINA_FALSE);
+                elm_slider_value_set(entUI.timeSlider, 0.0);
+                emotion_object_position_set(entUI.timeSlider, 0.0);
+                curSong = NULL;
 }
 
 // Stop button callback
 void
 ent_stop(void *data, Evas_Object *obj, void *event_info) {
 		emotion_object_play_set(entUI.emotion, EINA_FALSE);
-		emotion_object_position_set(entUI.emotion, 0.0);
+                elm_slider_value_set(entUI.timeSlider, 0.0);
+                emotion_object_position_set(entUI.emotion, 0.0);
+                curSong = NULL;
 }
 
 // Play specific item from the file list
 void
 ent_list_item_play(void *data, Evas_Object *obj, void *event_info) {
 		char file[100];
-		Evas_Object *li = data;
+		//Evas_Object *li = data;
  
- 		elm_list_clear (li);
- 		Eina_List *files = NULL;	
+                //elm_list_clear (li);
+                //Eina_List *files = NULL;
 
                 sprintf(file,"%s/%s", config.directory, (char*)data);
                 printf("Playing file: %s\n", file);
  
  		emotion_object_file_set(entUI.emotion, file);
- 		emotion_object_play_set(entUI.emotion, EINA_TRUE);
- 		eina_list_free(files);
+                //emotion_object_play_set(entUI.emotion, EINA_TRUE);
+                //eina_list_free(files);
  
  		curSong = elm_list_selected_item_get(obj);
+                ent_play(NULL, NULL, NULL);
 }
 
 // 
@@ -82,21 +101,31 @@ ent_eina_list_item_play(void *data) {
 // Previous button callback
 void
 ent_prev_item_play(void *data, Evas_Object *obj, void *event_info) {
- 		Evas_Object *tmp;
- 		tmp = elm_list_item_prev(curSong);
- 
- 		elm_list_item_selected_set(curSong, EINA_FALSE);
- 		ent_eina_list_item_play(tmp);	
+                Elm_Object_Item *song = NULL;
+                if (curSong) song = elm_list_item_prev(curSong);
+
+                if (song)
+                  {
+                     ent_stop(NULL, NULL, NULL);
+                     curSong = song;
+                     elm_list_item_selected_set(curSong, EINA_TRUE);
+                     ent_play(NULL, NULL, NULL);
+                  }
 }
 
 // Next button callback
 void
 ent_next_item_play(void *data, Evas_Object *obj, void *event_info) {
- 		Evas_Object *tmp;
- 		tmp = elm_list_item_next(curSong);
- 
- 		elm_list_item_selected_set(curSong, EINA_FALSE);
- 		ent_eina_list_item_play(tmp);
+                Elm_Object_Item *song = NULL;
+                if (curSong) song = elm_list_item_next(curSong);
+
+                if (song)
+                  {
+                     ent_stop(NULL, NULL, NULL);
+                     curSong = song;
+                     elm_list_item_selected_set(curSong, EINA_TRUE);
+                     ent_play(NULL, NULL, NULL);
+                  }
 }
 
 // Volume slide change callback
@@ -153,11 +182,18 @@ ent_load_file_list(void *data, Evas_Object *obj, void *event_info) {
 // Time slider change callback
 void
 ent_change_time(void *data, Evas_Object *obj, void *event_info) {
-		double len,tPerc;
-		len = emotion_object_play_length_get(entUI.emotion); 
-		tPerc = (double)floor((elm_slider_value_get(obj)));
-		double cur = (len*tPerc)/100;
-		emotion_object_position_set(entUI.emotion,cur);
+                if (curSong)
+                  {
+                     double len,tPerc;
+                     len = emotion_object_play_length_get(entUI.emotion);
+                     tPerc = (double)floor((elm_slider_value_get(obj)));
+                     double cur = (len*tPerc)/100;
+                     emotion_object_position_set(entUI.emotion,cur);
+                  }
+                else
+                  {
+                     elm_slider_value_set(entUI.timeSlider, 0.0);
+                  }
 }
 
 
