@@ -37,13 +37,14 @@ elm_main(int argc, char **argv)
    evas_object_show(entUI.controls);
 
    //Create parent directory input
-   entUI.directory = ent_create_directory();
+   ent_create_directory();
 
    // Creating tracklist
-   entUI.tracklist = ent_create_tracklist();
+   ent_create_tracklist();
+   ent_load_file_list(entUI.tracklist, NULL, NULL);
 
    // Setting up the flipper widget
-   entUI.flipper = ent_create_flipper();
+   ent_create_flipper();
 
    // Creating control buttons (Play, Pause, Stop etc)
    ent_create_control_buttons();
@@ -54,6 +55,10 @@ elm_main(int argc, char **argv)
    // Window callbacks
    evas_object_smart_callback_add(entUI.window, "delete,request", ent_quit, NULL);
    evas_object_smart_callback_add(entUI.directory, "changed", ent_directory_changed, NULL);
+   evas_object_smart_callback_add(entUI.volumeSlider, "changed", ent_change_volume, NULL);
+   evas_object_smart_callback_add(entUI.timeSlider, "changed", ent_change_time, NULL);
+   evas_object_smart_callback_add(entUI.emotion, "position_update", ent_update_time, entUI.timeSlider);
+
 
    // Show the window and RUN!
    evas_object_show(entUI.window);
