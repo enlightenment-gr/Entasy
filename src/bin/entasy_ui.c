@@ -75,7 +75,7 @@ ent_create_flipper() {
      cover = elm_photo_add(entUI.window);
      elm_photo_size_set(cover,200);
      elm_photo_fill_inside_set(cover, EINA_TRUE);
-     elm_photo_file_set(cover, "nullcover.jpg");
+     elm_photo_file_set(cover, "data/nullcover.jpg");
      elm_object_part_content_set(entUI.flipper, "front", cover);
      evas_object_show(cover);
 

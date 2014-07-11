@@ -15,7 +15,7 @@ ent_directory_changed(void *data, Evas_Object *obj, void *event_info EINA_UNUSED
         config.directory = malloc(strlen(txt) * sizeof(txt));
         sprintf(config.directory, "%s", txt);
         free(txt);
-        printf("The new config is: %s\n", config.directory);
+        //printf("The new config is: %s\n", config.directory);
      }
    ent_load_file_list(entUI.tracklist, NULL, NULL);
 }
