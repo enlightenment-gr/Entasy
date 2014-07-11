@@ -1,9 +1,6 @@
 #include "entasy.h"
+#include "entasy_ui.h"
 #include "entasy_cb.h"
-#include "entasy_tracklist.h"
-#include "entasy_flipper.h"
-#include "entasy_control_buttons.h"
-#include "entasy_sliders.h"
 
 EAPI_MAIN int
 elm_main(int argc, char **argv)

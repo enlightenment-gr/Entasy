@@ -9,10 +9,7 @@ entasy_CPPFLAGS = -I. \
 
 entasy_SOURCES = \
 entasy_cb.c entasy_cb.h \
-entasy_control_buttons.c entasy_control_buttons.h \
-entasy_flipper.c entasy_flipper.h \
-entasy_sliders.c entasy_sliders.h \
-entasy_tracklist.c entasy_tracklist.h \
+entasy_ui.c entasy_ui.h \
 entasy.h \
 entasy_main.c
 
