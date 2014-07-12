@@ -73,14 +73,20 @@ ent_list_item_play(void *data, Evas_Object *obj, void *event_info) {
                 //Eina_List *files = NULL;
 
                 sprintf(file,"%s/%s", config.directory, (char*)data);
-                printf("Playing file: %s\n", file);
+                if(ecore_file_is_dir(file))
+                  {
+                     printf("Lets open this dir\n");
+                  }
+                else
+                  {
+                     printf("Playing file: %s\n", file);
+                     emotion_object_file_set(entUI.emotion, file);
+                     //emotion_object_play_set(entUI.emotion, EINA_TRUE);
+                     //eina_list_free(files);
  
- 		emotion_object_file_set(entUI.emotion, file);
-                //emotion_object_play_set(entUI.emotion, EINA_TRUE);
-                //eina_list_free(files);
- 
- 		curSong = elm_list_selected_item_get(obj);
-                ent_play(NULL, NULL, NULL);
+                     curSong = elm_list_selected_item_get(obj);
+                     ent_play(NULL, NULL, NULL);
+                  }
 }
 
 // 
@@ -102,14 +108,24 @@ ent_eina_list_item_play(void *data) {
 void
 ent_prev_item_play(void *data, Evas_Object *obj, void *event_info) {
                 Elm_Object_Item *song = NULL;
+                char file[256];
+
                 if (curSong) song = elm_list_item_prev(curSong);
 
                 if (song)
                   {
-                     ent_stop(NULL, NULL, NULL);
-                     curSong = song;
-                     elm_list_item_selected_set(curSong, EINA_TRUE);
-                     ent_play(NULL, NULL, NULL);
+                     sprintf(file,"%s/%s", config.directory, elm_object_item_text_get(song));
+                     if (ecore_file_is_dir(file))
+                       {
+                          ent_stop(NULL, NULL, NULL);
+                       }
+                     else
+                       {
+                          ent_stop(NULL, NULL, NULL);
+                          curSong = song;
+                          elm_list_item_selected_set(curSong, EINA_TRUE);
+                          ent_play(NULL, NULL, NULL);
+                       }
                   }
 }
 
@@ -117,14 +133,24 @@ ent_prev_item_play(void *data, Evas_Object *obj, void *event_info) {
 void
 ent_next_item_play(void *data, Evas_Object *obj, void *event_info) {
                 Elm_Object_Item *song = NULL;
+                char file[256];
+
                 if (curSong) song = elm_list_item_next(curSong);
 
                 if (song)
                   {
-                     ent_stop(NULL, NULL, NULL);
-                     curSong = song;
-                     elm_list_item_selected_set(curSong, EINA_TRUE);
-                     ent_play(NULL, NULL, NULL);
+                     sprintf(file,"%s/%s", config.directory, elm_object_item_text_get(song));
+                     if (ecore_file_is_dir(file))
+                       {
+                          ent_stop(NULL, NULL, NULL);
+                       }
+                     else
+                       {
+                          ent_stop(NULL, NULL, NULL);
+                          curSong = song;
+                          elm_list_item_selected_set(curSong, EINA_TRUE);
+                          ent_play(NULL, NULL, NULL);
+                       }
                   }
 }
 
