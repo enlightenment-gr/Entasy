@@ -15,7 +15,7 @@ elm_main(int argc, char **argv)
 
     // Setting up emotion
     entUI.emotion = emotion_object_add( evas_object_evas_get(entUI.window) );
-    if( emotion_object_init(entUI.emotion,"gstreamer") == EINA_FALSE)
+    if( emotion_object_init(entUI.emotion,"gstreamer1") == EINA_FALSE)
       printf("Emotion not properly initialized!");
 
    // Setting up background
@@ -58,6 +58,7 @@ elm_main(int argc, char **argv)
    evas_object_smart_callback_add(entUI.volumeSlider, "changed", ent_change_volume, NULL);
    evas_object_smart_callback_add(entUI.timeSlider, "changed", ent_change_time, NULL);
    //evas_object_smart_callback_add(entUI.flipper, "clicked", ent_flip_panel, entUI.flipper);
+   evas_object_smart_callback_add(entUI.emotion, "playback_finished", ent_next_item_play, NULL);
    evas_object_smart_callback_add(entUI.emotion, "position_update", ent_update_time, entUI.timeSlider);
 
 

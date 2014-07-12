@@ -8,7 +8,7 @@
 
 // Music Library Structs
 typedef struct _Ent_Config{
-  const char* directory;
+  char* directory;
   const char* song_db_file;
   const char* song_db_num;
 } Config;
