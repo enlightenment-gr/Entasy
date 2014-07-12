@@ -17,7 +17,8 @@ ent_directory_changed(void *data, Evas_Object *obj, void *event_info EINA_UNUSED
         free(txt);
         //printf("The new config is: %s\n", config.directory);
      }
-   ent_load_file_list(entUI.tracklist, NULL, NULL);
+   if (ecore_file_is_dir(config.directory))
+     ent_load_file_list(entUI.tracklist, NULL, NULL);
 }
 
 // Window Quit Callback
@@ -71,11 +72,20 @@ ent_list_item_play(void *data, Evas_Object *obj, void *event_info) {
  
                 //elm_list_clear (li);
                 //Eina_List *files = NULL;
-
-                sprintf(file,"%s/%s", config.directory, (char*)data);
+                if (!strcmp((char *)data, ".."))
+                  {
+                     //printf("Folder up should be opened\n");
+                     ent_stop(NULL, NULL, NULL);
+                  }
+                else
+                  {
+                     sprintf(file,"%s/%s", config.directory, (char*)data);
+                  }
                 if(ecore_file_is_dir(file))
                   {
-                     printf("Lets open this dir\n");
+                     //printf("Lets open this dir\n");
+                     ent_stop(NULL, NULL, NULL);
+                     elm_object_text_set(entUI.directory, file);
                   }
                 else
                   {
@@ -191,11 +201,14 @@ void
 ent_load_file_list(void *data, Evas_Object *obj, void *event_info) {
  		Evas_Object *plist = data;
  		Eina_List *list, *l;
+                void *folder_up = "..";
  		char *zdata;
 
                 list = ecore_file_ls(config.directory);
                 if (list)
                    elm_list_clear(plist);
+
+                list = eina_list_prepend(list, folder_up);
  		EINA_LIST_FOREACH(list, l, zdata)
  		{
 	 		elm_list_item_append(plist,zdata,NULL,NULL,ent_list_item_play,zdata);
