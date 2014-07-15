@@ -3,6 +3,27 @@
 
 // Entasy Callbacks
 
+char *
+_prev_directory(char *folder)
+{
+   int i=0, pos=0, len = strlen(folder);
+   char *prev_folder;
+
+   for (i=len; i>=0; i--)
+     if (folder[i] == '/')
+       {
+          pos = i;
+          break;
+       }
+   prev_folder = (char *) malloc(sizeof(char) * len);
+
+   for (i=0; i<pos; i++)
+      prev_folder[i] = folder[i];
+   *(prev_folder+pos) = '\0';
+
+   return prev_folder;
+}
+
 // Folder change callback
 void
 ent_directory_changed(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
@@ -14,6 +35,7 @@ ent_directory_changed(void *data, Evas_Object *obj, void *event_info EINA_UNUSED
      {
         config.directory = malloc(strlen(txt) * sizeof(txt));
         sprintf(config.directory, "%s", txt);
+        _prev_directory(config.directory);
         free(txt);
         //printf("The new config is: %s\n", config.directory);
      }
@@ -76,6 +98,8 @@ ent_list_item_play(void *data, Evas_Object *obj, void *event_info) {
                   {
                      //printf("Folder up should be opened\n");
                      ent_stop(NULL, NULL, NULL);
+                     sprintf(config.directory,"%s", _prev_directory(config.directory));
+                     elm_object_text_set(entUI.directory, config.directory);
                   }
                 else
                   {
@@ -89,13 +113,16 @@ ent_list_item_play(void *data, Evas_Object *obj, void *event_info) {
                   }
                 else
                   {
-                     printf("Playing file: %s\n", file);
-                     emotion_object_file_set(entUI.emotion, file);
-                     //emotion_object_play_set(entUI.emotion, EINA_TRUE);
-                     //eina_list_free(files);
+                     if (strcmp((char *)data, ".."))
+                       {
+                          printf("Playing file: %s\n", file);
+                          emotion_object_file_set(entUI.emotion, file);
+                          //emotion_object_play_set(entUI.emotion, EINA_TRUE);
+                          //eina_list_free(files);
  
-                     curSong = elm_list_selected_item_get(obj);
-                     ent_play(NULL, NULL, NULL);
+                          curSong = elm_list_selected_item_get(obj);
+                          ent_play(NULL, NULL, NULL);
+                       }
                   }
 }
 
