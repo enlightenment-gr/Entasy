@@ -235,11 +235,30 @@ ent_load_file_list(void *data, Evas_Object *obj, void *event_info) {
                 if (list)
                    elm_list_clear(plist);
 
-                list = eina_list_prepend(list, folder_up);
  		EINA_LIST_FOREACH(list, l, zdata)
  		{
-	 		elm_list_item_append(plist,zdata,NULL,NULL,ent_list_item_play,zdata);
+			char dir_lookup[300];
+			strcpy (dir_lookup, config.directory);
+			strcat(dir_lookup, "/");
+			strcat(dir_lookup, zdata);
+			if (ecore_file_is_dir(dir_lookup))
+			  {
+					elm_list_item_append(plist,zdata,NULL,NULL,ent_list_item_play,zdata);
+			  }
  		}
+
+ 		EINA_LIST_FOREACH(list, l, zdata)
+ 		{
+			char dir_lookup[300];
+			strcpy (dir_lookup, config.directory);
+			strcat(dir_lookup, "/");
+			strcat(dir_lookup, zdata);
+			if (!ecore_file_is_dir(dir_lookup))
+			  {
+					elm_list_item_append(plist,zdata,NULL,NULL,ent_list_item_play,zdata);
+			  }
+ 		}
+		elm_list_item_prepend(plist,folder_up,NULL,NULL,ent_list_item_play,folder_up);
  
  		eina_list_free(list);
  		elm_list_go(plist);
