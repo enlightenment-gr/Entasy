@@ -228,18 +228,27 @@ void
 ent_load_file_list(void *data, Evas_Object *obj, void *event_info) {
  		Evas_Object *plist = data;
  		Eina_List *list, *l;
-                void *folder_up = "..";
- 		char *zdata;
+                Elm_Object_Item *sep;
+                char *zdata, dir[1024];
 
                 list = ecore_file_ls(config.directory);
                 if (list)
                    elm_list_clear(plist);
 
-                list = eina_list_prepend(list, folder_up);
+	        sep = elm_list_item_append(plist, "This is the separator, you're not \
+                                                   suppose to see this message in the \
+                                                   list", NULL, NULL, ent_list_item_play,
+                                                   "error");
  		EINA_LIST_FOREACH(list, l, zdata)
  		{
-	 		elm_list_item_append(plist,zdata,NULL,NULL,ent_list_item_play,zdata);
- 		}
+                        sprintf(dir, "%s/%s", config.directory, zdata);
+                        if (ecore_file_is_dir(dir))
+                          elm_list_item_insert_before(plist, sep, zdata, NULL, NULL, ent_list_item_play, zdata);
+                        else
+                          elm_list_item_append(plist, zdata, NULL, NULL, ent_list_item_play, zdata);
+                }
+                elm_object_item_del(sep);
+                elm_list_item_prepend(plist, "..", NULL, NULL, ent_list_item_play, "..");
  
  		eina_list_free(list);
  		elm_list_go(plist);
