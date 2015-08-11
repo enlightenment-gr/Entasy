@@ -2,21 +2,26 @@
 #include "entasy_ui.h"
 #include "entasy_cb.h"
 
+
+
 EAPI_MAIN int
 elm_main(int argc, char **argv)
 {
     Evas_Object *o;
     config.directory = "/home/YourUsername/Music";
 
+
     // Setting up the window
     entUI.window = elm_win_add(NULL, "entasy", ELM_WIN_BASIC);
     elm_win_title_set(entUI.window, "Entasy");
     elm_win_autodel_set(entUI.window, 1);
 
+
     // Setting up emotion
     entUI.emotion = emotion_object_add( evas_object_evas_get(entUI.window) );
     if( emotion_object_init(entUI.emotion,"gstreamer1") == EINA_FALSE)
       printf("Emotion not properly initialized!");
+
 
    // Setting up background
    entUI.background = elm_bg_add(entUI.window);
@@ -24,17 +29,20 @@ elm_main(int argc, char **argv)
    elm_win_resize_object_add(entUI.window, entUI.background);
    evas_object_show(entUI.background);
 
+
    // Settin up widgets box
    entUI.box = elm_box_add(entUI.window);
    elm_box_horizontal_set(entUI.box,EINA_TRUE);
    elm_win_resize_object_add(entUI.window, entUI.box);
    evas_object_show(entUI.box);
 
+
    // Setting up controls
    entUI.controls = elm_table_add(entUI.window);
    elm_box_pack_end(entUI.box, entUI.controls);
    evas_object_size_hint_align_set(entUI.controls, EVAS_HINT_FILL, EVAS_HINT_FILL);
    evas_object_show(entUI.controls);
+
 
    //Create parent directory input
    ent_create_directory();
@@ -51,6 +59,7 @@ elm_main(int argc, char **argv)
 
    // Creating the sliders (Time, Volume)
    ent_create_sliders();
+
 
    // Loading-up the preferences dialog
    ent_load_elm_preferences();
