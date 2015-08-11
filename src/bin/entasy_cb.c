@@ -281,3 +281,16 @@ ent_update_time(void *data, Evas_Object *obj, void *event_info) {
 		int t = (int)floor((100*cur)/len);
 		elm_slider_value_set(timeslide,t);
 }
+
+
+// Preferences Callbacks
+
+void
+ent_preferences_save(void * data, Evas_Object *obj, void *event_info)
+{
+    Evas_Object *prefs, *label;
+    prefs = obj;
+    label = (Evas_Object*) elm_prefs_item_object_get(prefs, "main:label");
+    elm_object_text_set(label, "<b>Your changes have been saved.</b>");
+}
+

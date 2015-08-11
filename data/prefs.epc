@@ -1,0 +1,65 @@
+
+collection {
+    page {
+        name: "main";
+        version: 1;
+        title: "Entasy Preferences";
+        subtitle: "Change the current Entasy settings.";
+        widget: "elm/vertical_box";
+
+        items {
+            item {
+                name: "pref1_label";
+                type: LABEL;
+                label: "Music Library Options";
+            }
+
+            item {
+                name: "sep1";
+                type: SEPARATOR;
+            }
+
+            item {
+                name: "musiclib_path";
+                type: TEXT;
+                editable: 1;
+                text {
+                    placeholder: "/path/to/your/musicDirectory/";
+                    default: "/home/YOURUSERNAME/Music";
+                    deny: "^[0-9]*$";
+                }
+            }
+
+            item {
+                name: "sep2";
+                type: SEPARATOR;
+            }
+            item {
+                name: "buttons";
+                type: PAGE;
+                source: "buttons";
+            }
+        }
+        
+    }
+
+    page {
+        name: "buttons";
+        version: 1;
+        title: "Actions";
+        widget: "elm/horizontal_box";
+        
+        items {
+            item {
+                name: "reset";
+                type: RESET;
+                label: "Defaults";
+            }
+            item {
+                name: "save";
+                type: SAVE;
+                label: "Save";
+            }
+        }
+    }
+}

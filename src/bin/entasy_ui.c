@@ -1,4 +1,6 @@
 #include "entasy_cb.h"
+
+
 void
 ent_create_control_buttons() {
        // THE BUTTOONNZZ
@@ -66,9 +68,9 @@ ent_create_flipper() {
      elm_table_pack(entUI.controls, entUI.flipper, 0, 0, 6, 6);
      evas_object_show(entUI.flipper);
 
-     elm_flip_interaction_set(entUI.flipper, ELM_FLIP_INTERACTION_PAGE);
-     elm_flip_interaction_direction_hitsize_set(entUI.flipper, ELM_FLIP_DIRECTION_LEFT, 1);
-     elm_flip_interaction_direction_hitsize_set(entUI.flipper, ELM_FLIP_DIRECTION_RIGHT, 1);
+     elm_flip_interaction_set(entUI.flipper, ELM_FLIP_INTERACTION_ROTATE);
+     elm_flip_interaction_direction_enabled_set(entUI.flipper, ELM_FLIP_DIRECTION_LEFT, 1);
+     elm_flip_interaction_direction_enabled_set(entUI.flipper, ELM_FLIP_DIRECTION_RIGHT, 1);
 
      // Creating the album cover
      Evas_Object *cover;
@@ -152,4 +154,20 @@ ent_create_tracklist() {
       evas_object_size_hint_align_set(entUI.tracklist, EVAS_HINT_FILL, EVAS_HINT_FILL);
       elm_table_pack(entUI.controls, entUI.tracklist, 6, 2, 6, 4);
       evas_object_show(entUI.tracklist);
+}
+
+
+void
+ent_load_elm_preferences()
+{
+    if (entUI.window) {
+        entUI.preferences = elm_prefs_add(entUI.window);
+        elm_prefs_autosave_set(entUI.preferences, EINA_FALSE);
+
+        //char pref_file[PATH_MAX];
+        //snprintf(pref_file, sizeof(pref_file), "%s/preferences.epb", elm_app_data_dir_get());
+        elm_prefs_file_set(entUI.preferences, "data/prefs.epb", "main");
+    } else {
+        printf("* Window not initialized! Tried to load the elm preferences before initializing the window?\n");
+    }
 }

@@ -52,6 +52,22 @@ elm_main(int argc, char **argv)
    // Creating the sliders (Time, Volume)
    ent_create_sliders();
 
+   // Loading-up the preferences dialog
+   ent_load_elm_preferences();
+   Elm_Prefs_Data* prefs = elm_prefs_data_new("entasy.cfg", NULL, EET_FILE_MODE_READ_WRITE);
+   elm_prefs_data_set(entUI.preferences, prefs);
+
+   // Load the preference data
+   Elm_Prefs_Item_Type prefType;
+   Eina_Value prefValue;
+   if ( elm_prefs_data_value_get(prefs, "main:musiclib_path", &prefType, &prefValue) ) {
+        eina_value_get(&prefValue, config.directory);
+   }
+
+
+   // Preferences callback(s)
+    evas_object_smart_callback_add(entUI.preferences, "page,saved", ent_preferences_save, NULL);
+
    // Window callbacks
    evas_object_smart_callback_add(entUI.window, "delete,request", ent_quit, NULL);
    evas_object_smart_callback_add(entUI.directory, "changed", ent_directory_changed, NULL);

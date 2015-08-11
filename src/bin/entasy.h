@@ -27,6 +27,8 @@ typedef struct _Ent_EntasyUI{
         Evas_Object *box;
         Evas_Object *controls;
 
+        Evas_Object *preferences;
+
         Evas_Object *tracklist;
         Evas_Object *flipper;
         Evas_Object *controlButtons;

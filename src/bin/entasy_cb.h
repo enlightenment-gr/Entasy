@@ -33,5 +33,10 @@ void ent_change_time(void* data, Evas_Object *obj, void *event_info);
 
 void ent_update_time(void* data, Evas_Object *obj, void *event_info);
 
+
+// Preferences Callbacks
+void ent_preferences_save(void * data, Evas_Object *obj, void *event_info);
+
+
 #endif
 
