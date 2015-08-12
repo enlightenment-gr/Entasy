@@ -20,16 +20,21 @@ typedef struct _Ent_EntasyUI{
         Evas_Object *box;
         Evas_Object *controls;
 
+        Evas_Object *preferences_window;
         Evas_Object *preferences;
 
         Evas_Object *tracklist;
-        Evas_Object *flipper;
         Evas_Object *controlButtons;
         Evas_Object *timeText;
         Evas_Object *timeSlider;
         Evas_Object *volumeSlider;
         Evas_Object *directory;
 
+        Evas_Object *flipper;
+        Evas_Object *flipperCover;
+        Evas_Object *flipperLyrics;
+
+        char hasNonEmptyCover;
 } EntasyUI;
 
 // GLOBALUS MAXIMUS

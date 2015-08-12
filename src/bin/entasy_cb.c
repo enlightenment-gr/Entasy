@@ -6,44 +6,29 @@
 // Entasy Callbacks
 
 char *
-_prev_directory(char *folder)
+_parent_directory(char *folder)
 {
     int i=0, pos=0, len = strlen(folder);
-    char *prev_folder;
+    char *parent_folder;
 
-    for (i=len; i>=0; i--)
+    for (i=len; i>=0; i--) {
         if (folder[i] == '/') {
             pos = i;
             break;
         }
-    prev_folder = (char *) malloc(sizeof(char) * len);
+    }
+    parent_folder = (char *) malloc(sizeof(char) * len);
 
-    for (i=0; i<pos; i++)
-        prev_folder[i] = folder[i];
-    *(prev_folder+pos) = '\0';
+    if (parent_folder) {
+        for (i=0; i<pos; i++)
+            parent_folder[i] = folder[i];
 
-    return prev_folder;
-}
+        *(parent_folder+pos) = '\0';
 
-
-
-// Folder change callback
-void
-ent_directory_changed(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
-{
-    char *txt;
-
-    txt = elm_entry_markup_to_utf8(elm_object_text_get(obj));
-    if (txt) {
-        config.directory = malloc(strlen(txt) * sizeof(txt));
-        sprintf(config.directory, "%s", txt);
-        _prev_directory(config.directory);
-        free(txt);
-        //printf("The new config is: %s\n", config.directory);
+        return parent_folder;
     }
 
-    if (ecore_file_is_dir(config.directory))
-        ent_load_file_list(entUI.tracklist, NULL, NULL);
+    return NULL;
 }
 
 
@@ -104,37 +89,30 @@ ent_stop(void *data, Evas_Object *obj, void *event_info)
 void
 ent_list_item_play(void *data, Evas_Object *obj, void *event_info)
 {
-    char file[100];
-    //Evas_Object *li = data;
+    // char file[100];    
+    // sprintf(file,"%s/%s", config.directory, (char*)data);
+    char* item = (char*)data;
+    int fullpathSize = strlen(config.directory) + strlen(item) + 2;
+    char* fullpathItem = malloc( sizeof(char) * ( fullpathSize ) );
+    fullpathItem[fullpathSize] = '\0';
+    sprintf(fullpathItem, "%s/%s\0", config.directory, item);
 
-    //elm_list_clear (li);
-    //Eina_List *files = NULL;
-    if (!strcmp((char *)data, "..")) {
-        //printf("Folder up should be opened\n");
-        ent_stop(NULL, NULL, NULL);
-        sprintf(config.directory,"%s", _prev_directory(config.directory));
-        elm_object_text_set(entUI.directory, config.directory);
+    if (strcmp(item, "..") == 0) { // 0 means same
+        //ent_stop(NULL, NULL, NULL);
+        config.directory = _parent_directory(config.directory);
+        ent_load_file_list(entUI.tracklist, NULL, NULL);
     }
-    else {
-        sprintf(file,"%s/%s", config.directory, (char*)data);
-    }
-
-
-    if(ecore_file_is_dir(file)) {
-        //printf("Lets open this dir\n");
-        ent_stop(NULL, NULL, NULL);
-        elm_object_text_set(entUI.directory, file);
-    }
-    else {
-        if (strcmp((char *)data, "..")) {
-            printf("Playing file: %s\n", file);
-            emotion_object_file_set(entUI.emotion, file);
-            //emotion_object_play_set(entUI.emotion, EINA_TRUE);
-            //eina_list_free(files);
-
-            curSong = elm_list_selected_item_get(obj);
-            ent_play(NULL, NULL, NULL);
-        }
+    else if (ecore_file_is_dir(fullpathItem)) {
+        //ent_stop(NULL, NULL, NULL);
+        //free(config.directory);
+        config.directory = malloc( fullpathSize );
+        sprintf(config.directory, "%s", fullpathItem);
+        ent_load_file_list(entUI.tracklist, NULL, NULL);
+    } else {
+        //printf("Playing file: %s\n", file);
+        emotion_object_file_set(entUI.emotion, fullpathItem);
+        curSong = elm_list_selected_item_get(obj);
+        ent_play(NULL, NULL, NULL);
     }
 }
 
@@ -239,7 +217,7 @@ ent_load_file_list(void *data, Evas_Object *obj, void *event_info)
     Evas_Object *plist = data;
     Eina_List *list, *l;
     Elm_Object_Item *sep;
-    char *zdata, dir[1024];
+    char *filename, dir[1024];
 
     list = ecore_file_ls(config.directory);
     if (list)
@@ -249,14 +227,31 @@ ent_load_file_list(void *data, Evas_Object *obj, void *event_info)
                                        suppose to see this message in the \
                                        list", NULL, NULL, ent_list_item_play,
                                        "error");
-    EINA_LIST_FOREACH(list, l, zdata)
+
+    char hasCover = 0;
+    EINA_LIST_FOREACH(list, l, filename)
     {
-        sprintf(dir, "%s/%s", config.directory, zdata);
+        // *FIXME* eina list can hold the fullpath+file data instead of just the name(?)
+        sprintf(dir, "%s/%s", config.directory, filename);
         if (ecore_file_is_dir(dir))
-            elm_list_item_insert_before(plist, sep, zdata, NULL, NULL, ent_list_item_play, zdata);
-        else
-            elm_list_item_append(plist, zdata, NULL, NULL, ent_list_item_play, zdata);
+            elm_list_item_insert_before(plist, sep, filename, NULL, NULL, ent_list_item_play, filename);
+        else {
+            elm_list_item_append(plist, filename, NULL, NULL, ent_list_item_play, filename);
+            
+            // if the file is named folder.jpg or smth add as cover
+            if ( eina_str_has_extension(filename, ".jpg") ||
+                 eina_str_has_extension(filename, ".png") ||
+                 eina_str_has_extension(filename, ".bmp") ) {
+
+                hasCover = 1;
+                entUI.hasNonEmptyCover = 1;
+                elm_photo_file_set(entUI.flipperCover, dir);
+            }
+        }
     }
+
+    if (!hasCover && entUI.hasNonEmptyCover)
+        elm_photo_file_set(entUI.flipperCover, "data/nullcover.jpg");
 
     elm_object_item_del(sep);
     elm_list_item_prepend(plist, "..", NULL, NULL, ent_list_item_play, "..");
@@ -299,6 +294,15 @@ ent_update_time(void *data, Evas_Object *obj, void *event_info)
 
 
 
+// Opens up the preferences dialog
+void
+ent_open_prefs(void* data, Evas_Object* obj, void *event_info)
+{
+    evas_object_show(entUI.preferences_window);
+}
+
+
+
 
 // Preferences Callbacks
 
@@ -307,7 +311,8 @@ ent_preferences_save(void * data, Evas_Object *obj, void *event_info)
 {
     Evas_Object *prefs, *label;
     prefs = obj;
-    label = (Evas_Object*) elm_prefs_item_object_get(prefs, "main:label");
+    label = (Evas_Object*) elm_prefs_item_object_get(prefs, "main:pref1_label");
     elm_object_text_set(label, "<b>Your changes have been saved.</b>");
+    evas_object_hide(entUI.preferences_window);
 }
 
