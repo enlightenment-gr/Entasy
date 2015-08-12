@@ -17,6 +17,19 @@ elm_main(int argc, char **argv)
     elm_win_autodel_set(entUI.window, 1);
 
 
+    // Loading-up the preferences dialog
+   ent_load_elm_preferences();
+   Elm_Prefs_Data* prefs = elm_prefs_data_new("entasy.cfg", NULL, EET_FILE_MODE_READ_WRITE);
+   elm_prefs_data_set(entUI.preferences, prefs);
+
+   // Load the preference data
+   Elm_Prefs_Item_Type prefType;
+   Eina_Value prefValue;
+   if ( elm_prefs_data_value_get(prefs, "main:musiclib_path", &prefType, &prefValue) ) {
+        eina_value_get(&prefValue, &config.directory);
+   }
+
+
     // Setting up emotion
     entUI.emotion = emotion_object_add( evas_object_evas_get(entUI.window) );
     if( emotion_object_init(entUI.emotion,"gstreamer1") == EINA_FALSE)
@@ -59,19 +72,6 @@ elm_main(int argc, char **argv)
 
    // Creating the sliders (Time, Volume)
    ent_create_sliders();
-
-
-   // Loading-up the preferences dialog
-   ent_load_elm_preferences();
-   Elm_Prefs_Data* prefs = elm_prefs_data_new("entasy.cfg", NULL, EET_FILE_MODE_READ_WRITE);
-   elm_prefs_data_set(entUI.preferences, prefs);
-
-   // Load the preference data
-   Elm_Prefs_Item_Type prefType;
-   Eina_Value prefValue;
-   if ( elm_prefs_data_value_get(prefs, "main:musiclib_path", &prefType, &prefValue) ) {
-        eina_value_get(&prefValue, config.directory);
-   }
 
 
    // Preferences callback(s)
