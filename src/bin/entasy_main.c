@@ -7,8 +7,8 @@
 EAPI_MAIN int
 elm_main(int argc, char **argv)
 {
-    Evas_Object *o;
-    config.directory = "/home/YourUsername/Music";
+    //Evas_Object *o;
+
 
 
     // Setting up the window
@@ -26,7 +26,10 @@ elm_main(int argc, char **argv)
    Elm_Prefs_Item_Type prefType;
    Eina_Value prefValue;
    if ( elm_prefs_data_value_get(prefs, "main:musiclib_path", &prefType, &prefValue) ) {
-        eina_value_get(&prefValue, &config.directory);
+        eina_value_get(&prefValue, &entState.base_directory);
+        int dirstr_len = strlen(entState.base_directory);
+        entState.current_directory = malloc( sizeof(char) * dirstr_len );
+        eina_strlcpy(entState.current_directory, entState.base_directory, dirstr_len);
    }
 
 

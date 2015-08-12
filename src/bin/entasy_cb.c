@@ -37,6 +37,7 @@ _parent_directory(char *folder)
 void
 ent_quit(void *data, Evas_Object *obj, void *event_info)
 {
+    ent_stop(NULL, NULL, NULL);
     elm_exit();
 }
 
@@ -92,21 +93,23 @@ ent_list_item_play(void *data, Evas_Object *obj, void *event_info)
     // char file[100];    
     // sprintf(file,"%s/%s", config.directory, (char*)data);
     char* item = (char*)data;
-    int fullpathSize = strlen(config.directory) + strlen(item) + 2;
+    int fullpathSize = strlen(entState.current_directory) + strlen(item) + 2;
     char* fullpathItem = malloc( sizeof(char) * ( fullpathSize ) );
     fullpathItem[fullpathSize] = '\0';
-    sprintf(fullpathItem, "%s/%s\0", config.directory, item);
+    sprintf(fullpathItem, "%s/%s\0", entState.current_directory, item);
+
+    ent_stop(NULL, NULL, NULL);
 
     if (strcmp(item, "..") == 0) { // 0 means same
         //ent_stop(NULL, NULL, NULL);
-        config.directory = _parent_directory(config.directory);
+        entState.current_directory = _parent_directory(entState.current_directory);
         ent_load_file_list(entUI.tracklist, NULL, NULL);
     }
     else if (ecore_file_is_dir(fullpathItem)) {
         //ent_stop(NULL, NULL, NULL);
         //free(config.directory);
-        config.directory = malloc( fullpathSize );
-        sprintf(config.directory, "%s", fullpathItem);
+        entState.current_directory = malloc( fullpathSize );
+        sprintf(entState.current_directory, "%s", fullpathItem);
         ent_load_file_list(entUI.tracklist, NULL, NULL);
     } else {
         //printf("Playing file: %s\n", file);
@@ -146,7 +149,7 @@ ent_prev_item_play(void *data, Evas_Object *obj, void *event_info)
         song = elm_list_item_prev(curSong);
 
     if (song) {
-        sprintf(file,"%s/%s", config.directory, elm_object_item_text_get(song));
+        sprintf(file,"%s/%s", entState.current_directory, elm_object_item_text_get(song));
         
         if (ecore_file_is_dir(file)) {
             ent_stop(NULL, NULL, NULL);
@@ -173,7 +176,7 @@ ent_next_item_play(void *data, Evas_Object *obj, void *event_info)
         song = elm_list_item_next(curSong);
 
     if (song) {
-        sprintf(file,"%s/%s", config.directory, elm_object_item_text_get(song));
+        sprintf(file,"%s/%s", entState.current_directory, elm_object_item_text_get(song));
     
         if (ecore_file_is_dir(file)) {
             ent_stop(NULL, NULL, NULL);
@@ -219,7 +222,7 @@ ent_load_file_list(void *data, Evas_Object *obj, void *event_info)
     Elm_Object_Item *sep;
     char *filename, dir[1024];
 
-    list = ecore_file_ls(config.directory);
+    list = ecore_file_ls(entState.current_directory);
     if (list)
        elm_list_clear(plist);
 
@@ -228,29 +231,31 @@ ent_load_file_list(void *data, Evas_Object *obj, void *event_info)
                                        list", NULL, NULL, ent_list_item_play,
                                        "error");
 
-    char hasCover = 0;
+    char foundCover = 0;
     EINA_LIST_FOREACH(list, l, filename)
     {
         // *FIXME* eina list can hold the fullpath+file data instead of just the name(?)
-        sprintf(dir, "%s/%s", config.directory, filename);
+        sprintf(dir, "%s/%s", entState.current_directory, filename);
         if (ecore_file_is_dir(dir))
             elm_list_item_insert_before(plist, sep, filename, NULL, NULL, ent_list_item_play, filename);
         else {
             elm_list_item_append(plist, filename, NULL, NULL, ent_list_item_play, filename);
             
             // if the file is named folder.jpg or smth add as cover
-            if ( eina_str_has_extension(filename, ".jpg") ||
-                 eina_str_has_extension(filename, ".png") ||
-                 eina_str_has_extension(filename, ".bmp") ) {
+            if ( !foundCover && (eina_str_has_extension(filename, ".jpg")  ||
+                                 eina_str_has_extension(filename, ".jpeg") ||
+                                 eina_str_has_extension(filename, ".png")  ||
+                                 eina_str_has_extension(filename, ".bmp")   )
+                ) {
 
-                hasCover = 1;
-                entUI.hasNonEmptyCover = 1;
+                foundCover = 1;
+                entState.hasCoverOn = 1;
                 elm_photo_file_set(entUI.flipperCover, dir);
             }
         }
     }
 
-    if (!hasCover && entUI.hasNonEmptyCover)
+    if (!foundCover && entState.hasCoverOn)
         elm_photo_file_set(entUI.flipperCover, "data/nullcover.jpg");
 
     elm_object_item_del(sep);

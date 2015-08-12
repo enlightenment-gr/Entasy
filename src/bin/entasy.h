@@ -6,10 +6,13 @@
 #include <Ecore_Con.h>
 #include <math.h>
 
-// Music Library Structs
-typedef struct _Ent_Config{
-  char* directory;
-} Config;
+
+typedef struct _Ent_PlayerState {
+  char* base_directory;
+  char* current_directory;
+
+  char hasCoverOn; // if a cover is loaded its != 0
+} PlayerState;
 
 
 // GUI Structs
@@ -33,13 +36,12 @@ typedef struct _Ent_EntasyUI{
         Evas_Object *flipper;
         Evas_Object *flipperCover;
         Evas_Object *flipperLyrics;
-
-        char hasNonEmptyCover;
 } EntasyUI;
 
 // GLOBALUS MAXIMUS
 EntasyUI entUI;
-Config config;
+PlayerState entState;
 Elm_Object_Item *curSong;
+//Config config;
 
 #endif

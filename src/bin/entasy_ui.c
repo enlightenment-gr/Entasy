@@ -151,32 +151,6 @@ ent_create_sliders()
 
 
 void
-ent_create_directory()
-{
-    Evas_Object *o, *folder;
-
-    o = elm_label_add(entUI.window);
-    elm_object_text_set(o, "Parent Music Folder");
-    evas_object_size_hint_weight_set(o, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-    evas_object_size_hint_align_set(o, EVAS_HINT_FILL, EVAS_HINT_FILL);
-    elm_table_pack(entUI.controls, o, 6, 6, 1, 1);
-    evas_object_show(o);
-
-    entUI.directory = elm_entry_add(entUI.window);
-    evas_object_size_hint_weight_set(entUI.directory, EVAS_HINT_EXPAND, 0.0);
-    evas_object_size_hint_align_set(entUI.directory, EVAS_HINT_FILL, 0.5);
-    elm_entry_single_line_set(entUI.directory, EINA_TRUE);
-    elm_entry_scrollable_set(entUI.directory, EINA_TRUE);
-    elm_scroller_policy_set(entUI.directory, ELM_SCROLLER_POLICY_OFF, ELM_SCROLLER_POLICY_OFF);
-    elm_object_text_set(entUI.directory, config.directory);
-    //elm_box_pack_end(entUI.window, entUI.directory);
-    elm_table_pack(entUI.controls, entUI.directory, 6, 7, 5, 1);
-    evas_object_show(entUI.directory);
-}
-
-
-
-void
 ent_create_tracklist()
 {
     entUI.tracklist = elm_list_add(entUI.window);
